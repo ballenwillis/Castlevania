@@ -1,8 +1,8 @@
-package Caslevania;
+package castlevania;
 
 import javax.swing.JComponent;
 
-public class Entity extends JComponent{
+public abstract class Entity extends JComponent{
 
 	private int width;
 	private int height;

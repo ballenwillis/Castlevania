@@ -1,7 +1,7 @@
-package Caslevania;
+package castlevania;
 
-import java.awt.Component;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity{
 	
@@ -13,14 +13,17 @@ public class Player extends Entity{
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
 	private SpriteSheet sheet;
+	private int health;
+	private ArrayList<Item> items;
 	
 	public Player(int x, int y)
 	{
 		super();
 		sheet = new SpriteSheet("belmont_sprite_sheet.jpg", WIDTH, HEIGHT, spriteRows, spriteCols);
-		//sheet = new SpriteSheet("runningGrant.png", WIDTH, HEIGHT, spriteRows, spriteCols);
 		this.x = x;
 		this.y = y;
+		health = 10;
+		items = new ArrayList<Item>(); //for items gathered in game
 	}
 	
 	public BufferedImage changeImages() //CHANGE THIS METHOD!-----------------------------------------------------------
@@ -34,6 +37,7 @@ public class Player extends Entity{
 		counter++;
 		if (counter > 5)
 		{
+			setX(this.x + 10);
 			if (ySprite != spriteRows -1 )
 			{
 				ySprite++;
@@ -43,6 +47,7 @@ public class Player extends Entity{
 				ySprite = 0;
 			}
 			counter = 0;
+			
 		}
 		return sheet.getImage(xSprite, ySprite);
 	}
@@ -50,16 +55,44 @@ public class Player extends Entity{
 	public int getX() {
 		return x;
 	}
+	
+	public void setX(int _x) {
+		this.x = _x;
+	}
 
 	public int getY() {
 		return y;
 	}
 
+	public void setY(int _y) {
+		this.y = _y;
+	}
+	
 	public int getWIDTH() {
 		return WIDTH;
 	}
 
 	public int getHEIGHT() {
 		return HEIGHT;
+	}
+	
+	public void setHealth(int x)
+	{
+		this.health = x;
+	}
+	
+	public int getHealth()
+	{
+		return health;
+	}
+	
+	public void addItem(Item item)
+	{
+		items.add(item);
+	}
+	
+	public void removeItem(Item item)
+	{
+		items.remove(item);
 	}
 }
