@@ -1,4 +1,4 @@
-package Caslevania;
+package castlevania;
 
 public class CastlevaniaRunner {
 
