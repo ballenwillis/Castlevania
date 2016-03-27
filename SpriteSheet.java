@@ -3,7 +3,6 @@ package castlevania;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -17,6 +16,7 @@ public class SpriteSheet {
 		try {
 			this.spriteSheet = ImageIO.read(new File(stringSpriteSheet));
 		} catch (IOException e) {
+
 			System.out.println("Error Opening File.");
 		}
 		images = new BufferedImage[rows][columns];

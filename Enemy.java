@@ -2,15 +2,16 @@ package castlevania;
 
 public abstract class Enemy extends Entity {
 
+	private static final long serialVersionUID = 2003297664785729009L;
 	private int x;
 	private int y;
 	private final int WIDTH;
 	private final int HEIGHT;
-	private SpriteSheet sheet;
+	private SpriteSheet SHEET;
 	
-	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet SHEET)
+	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
 	{
-		super(x, y, SHEET);
+		super(x, y, sheet);
 		this.WIDTH = WIDTH;
 		this.HEIGHT = HEIGHT;
 	}
@@ -40,7 +41,7 @@ public abstract class Enemy extends Entity {
 	}
 
 	public SpriteSheet getSHEET() {
-		return sheet;
+		return SHEET;
 	}
 	
 	
