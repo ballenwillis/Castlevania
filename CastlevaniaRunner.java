@@ -6,5 +6,7 @@ public class CastlevaniaRunner {
 		Game game = new Game();
 		
 		game.start();
+
 	}
+
 }
