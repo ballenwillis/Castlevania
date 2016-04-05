@@ -59,4 +59,7 @@ public abstract class Item extends Entity {
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
+	
+	
+	
 }

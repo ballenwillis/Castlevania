@@ -8,4 +8,9 @@ public class Boss extends Enemy{
 		super(x, y, WIDTH, HEIGHT, SHEET);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+
+
 }

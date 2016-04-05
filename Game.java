@@ -5,33 +5,43 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-public class Game implements Runnable, KeyListener {
+public class Game extends JFrame implements Runnable, KeyListener {
 
-	private final int WIDTH = 800;
-	private final int HEIGHT = 600;
+	private final int WIDTH = 800, HEIGHT = 600;
 	private boolean running = false;
-	private JFrame frame;
 	private Player p;
+	private Graphics g;
+	private GUI gui;
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
-
+	
+	private Level[] levels = { 
+			new Level("levels/level1.png", new Audio("music/vampirekiller.wav")) 
+			};
+	
+	private int oldHealth, loop = 0;
+	
 	public Game() {
-		frame = new JFrame();
-		frame.setSize(new Dimension(800, 600));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		frame.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-		frame.setLocationRelativeTo(null);
-		frame.setFocusable(true);
-		frame.setResizable(false);
-		frame.pack();
-		frame.setVisible(true);
-		frame.addKeyListener(this);
-		frame.add(new GUI());
-
+		p = new Player(0, HEIGHT - 128);
+		oldHealth = p.getHealth();
+		gui = new GUI();
+		setSize(new Dimension(800, 600));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setMinimumSize(new Dimension(WIDTH, HEIGHT));
+		setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		add(gui);
+		setLocationRelativeTo(null);
+		setFocusable(true);
+		setResizable(false);
+		pack();
+		setVisible(true);
+		addKeyListener(this);
 	}
 
 	public void start() {
@@ -40,14 +50,10 @@ public class Game implements Runnable, KeyListener {
 
 	public void run() {
 		running = true;
-		p = new Player(0, HEIGHT - 128);
 
 		while (running) {
 			try {
 				Thread.sleep(17);
-				BufferedImage image = p.changeImages();
-				Graphics g = frame.getGraphics();
-				g.drawImage(image, p.getX(), p.getY(), null);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -58,13 +64,14 @@ public class Game implements Runnable, KeyListener {
 	public void stop() {
 		running = false;
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
+		p.isRunning = false;
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
-		case KeyEvent.VK_W:
-			p.setY(p.getY() - 10);
-			break;
+		// case KeyEvent.VK_W:
+		// p.jump();
+		// break;
 		case KeyEvent.VK_S:
 			p.setY(p.getY() + 10);
 			break;
@@ -76,6 +83,12 @@ public class Game implements Runnable, KeyListener {
 			dIsDown = true;
 			p.setVelx(10);
 			break;
+		case KeyEvent.VK_SPACE:
+			Audio whip1 = new Audio("soundeffects/whip1.wav");
+			whip1.play();
+		}
+		if (aIsDown == true || dIsDown == true) {
+			p.isRunning = true;
 		}
 	}
 
@@ -97,9 +110,10 @@ public class Game implements Runnable, KeyListener {
 		case KeyEvent.VK_D:
 			dIsDown = false;
 			break;
-		case KeyEvent.VK_W:
-			wIsDown = false;
-			break;
+		// case KeyEvent.VK_W:
+		// p.jump();
+		// wIsDown = false;
+		// break;
 		case KeyEvent.VK_S:
 			sIsDown = false;
 			break;
@@ -111,7 +125,26 @@ public class Game implements Runnable, KeyListener {
 
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void paint(Graphics g) {
+		int newHealth = p.getHealth();
+		try {
+			Thread.sleep(17);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedImage image = p.changeImages();
+		// System.out.println(p.getX() + ", " + p.getY());
+		g.drawImage(image, p.getX(), p.getY(), null);
+		if (newHealth != oldHealth || loop == 0)
+		{
+			gui.paintComponent(g);
+		}
+		loop++;
+		repaint();
 	}
 
 	public int getWIDTH() {
@@ -120,9 +153,5 @@ public class Game implements Runnable, KeyListener {
 
 	public int getHEIGHT() {
 		return HEIGHT;
-	}
-
-	public JFrame getFrame() {
-		return frame;
 	}
 }

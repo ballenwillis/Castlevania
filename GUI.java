@@ -23,9 +23,11 @@ public class GUI extends JComponent {
 			Rectangle rect = new Rectangle(x, 40, 12, 30);
 			playerHealth.add(rect);
 		}
+		//repaint();
 	}
 
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
 		Color black1 = new Color(139, 90, 0);
