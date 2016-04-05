@@ -69,9 +69,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		p.isRunning = false;
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
-		// case KeyEvent.VK_W:
-		// p.jump();
-		// break;
+		case KeyEvent.VK_W:
+			wIsDown = true;
+			p.jump();
+			break;
 		case KeyEvent.VK_S:
 			p.setY(p.getY() + 10);
 			break;

@@ -11,20 +11,19 @@ public class Player extends Entity {
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
-	private int y;
-	private final int SPRITEROWS= 4, SPRITECOLS= 6;
+	private int y, originalYPos, initYVel = 30, accel = 10;
+	private int t;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6;
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
-	public boolean isRunning = false, isAttacking = false, isStanding = true,
-			isJumping = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT,
-				SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 		this.x = x;
 		this.y = y;
 		health = 10;
@@ -37,7 +36,8 @@ public class Player extends Entity {
 	{
 		counter++;
 		if (counter > 5) {
-			if (isRunning)// I'm going to have images be returned differently
+			// System.out.println(this.y); //For debugging only.
+			if (isRunning) // I'm going to have images be returned differently
 							// depending on what the player is doing. This part
 							// is if it's running.
 			{
@@ -47,7 +47,7 @@ public class Player extends Entity {
 					ySprite = 0;
 				}
 				counter = 0;
-			} else if (isAttacking)// This sprite is for when he's attacking.
+			} else if (isAttacking) // This sprite is for when he's attacking.
 			{
 				if (isStanding) {
 					for (int i = 0; i < 2; i++) {
@@ -61,47 +61,40 @@ public class Player extends Entity {
 			}
 		}
 		this.x += velx;
-		
+
 		return sheet.getImage(xSprite, ySprite);
 	}
 
-	public void jump() { //Needs to get fixed.
-		if (!isJumping) {
+	public void jump() { // Needs to get fixed.
+		
+		if (!isJumping) { //Need to make this method call itself. In progress
+			originalYPos = this.getY();
 			isJumping = true;
-			int originalPos = this.y;
-			int initYVel = 50;
-			int t = 0;
-			int acceleration = 1;
-			while (true) {
-				t++;
-				this.y = originalPos;
-				this.y += t * (initYVel + ((acceleration * t) / 2));
-				if (this.y == originalPos && t != 0)
-				{
-					break;
-				}
-			}
 			t = 0;
 			
-			/*
-			for (int y = this.getY(); y >= originalPos - 60; y--) {
-				try {
-					Thread.sleep(2);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				this.setY(y);
+		} else {
+			t++;
+			this.y = originalYPos - ((initYVel*t) + (accel*t*t)/2);
+			
+			if (this.y >= originalYPos && t > 2)
+			{
+				
+			}else{
+				this.jump();
 			}
-
-			for (int y = getY(); y <= originalPos + 5; y++) {
-				try {
-					Thread.sleep(2);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				setY(y);
-			}*/
 		}
+
+		/*
+		 * for (int y = this.getY(); y >= originalPos - 60; y--) { try {
+		 * Thread.sleep(2); } catch (InterruptedException e) {
+		 * e.printStackTrace(); } this.setY(y); }
+		 * 
+		 * for (int y = getY(); y <= originalPos + 5; y++) { try {
+		 * Thread.sleep(2); } catch (InterruptedException e) {
+		 * e.printStackTrace(); } setY(y); }
+		 *
+		 * }
+		 */
 	}
 
 	public boolean testBelow() {
@@ -169,7 +162,7 @@ public class Player extends Entity {
 	public int getSpriteRows() {
 		return SPRITEROWS;
 	}
-	
+
 	public int getSpriteCols() {
 		return SPRITECOLS;
 	}
