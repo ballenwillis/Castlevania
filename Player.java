@@ -9,7 +9,9 @@ public class Player extends Entity {
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
-	private int y, vely, velyInit = 3, accel = -4, t = 0;
+
+	private int y, vely, velyInit = 18, accel = -23, t = 0;
+
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128,
 			HEIGHT = 128;
 	private SpriteSheet sheet;
@@ -37,15 +39,23 @@ public class Player extends Entity {
 										// METHOD!-----------------------------------------------------------
 	{
 		counter++;
-		if (counter > 5) {
-			if (isJumping)
-			{
-				xSprite = 0;
-				ySprite = 3;
+		if (isJumping) {
+			if (clearBelow()) {
+				jump();
+			} else {
+				vely = 0;
+				isJumping = false;
 			}
-			else if (isRunning) // I'm going to have images be returned differently
-							// depending on what the player is doing. This part
-							// is if it's running.
+		}
+
+		if (counter >= 5) {
+			if (isJumping) {
+				xSprite = 0;
+				ySprite = 5;
+			} else if (isRunning) // I'm going to have images be returned
+									// differently
+			// depending on what the player is doing. This part
+			// is if it's running.
 			{
 				xSprite = 0;
 				if (ySprite != SPRITECOLS - 1 && velx != 0) {
@@ -79,56 +89,44 @@ public class Player extends Entity {
 		}
 		this.x += velx;
 		this.y += vely;
-		System.out.println("Velocity: " + vely + " Pos: " + this.y);
+		System.out.println("Velocity: " + vely + " Pos: " + this.y); // For
+																		// debugging
 		return sheet.getImage(xSprite, ySprite);
 	}
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
 	{
+		if (this.y + HEIGHT > 600) {
+			this.y = 600 - HEIGHT;
+			return false;
+		}
+		return true;
+	}
+
+	public boolean clearAbove() {
 		return true;
 	}
 
 	public void jump() { // Needs to get fixed.
-		
-		
-		
+
 		/*
-		 * I have no idea how I'm going make this paint every time
-		 * it changes the y-velocity. This may be where threading is extremely important.
-		 * I should talk to Josh Crotts about this tomorrow and see what he thinks.
-		 * I know he's busy right now.
+		 * I have no idea how I'm going make this paint every time it changes
+		 * the y-velocity. This may be where threading is extremely important. I
+		 * should talk to Josh Crotts about this tomorrow and see what he
+		 * thinks. I know he's busy right now.
 		 * 
 		 * I need to sleep on this tonight because I just can't get it. A good
 		 * amount of work done today, however.
 		 */
-		
-		
-		// v = vi + at   ---- Physics ----
+
+		// v = vi + at ---- Physics ----
 		isJumping = true;
 		t++;
-		if (t % 4 == 0)
-		{
-			vely = (int) ((velyInit + accel * (t / 30)) * -1);
+		if (t % 4 == 0) {
+			vely = (int) ((velyInit + accel * ((double) (t / 30.0))) * -1);
 			System.out.println(vely);
 		}
-		if (isClear(vely))
-		{
-			changeImages();
-			jump();
-		}else{
-			vely = 0;
-			isJumping = false;
-		}
-	}
-	
-	public boolean isClear(int v)
-	{
-		if (v > velyInit)
-		{
-			return false;
-		}
-		return true;
 	}
 
 	public boolean onGround() {
