@@ -1,7 +1,5 @@
 package castlevania;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -11,19 +9,19 @@ public class Player extends Entity {
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
-	private int y, originalYPos, initYVel = 30, accel = 10;
-	private int t;
-	private final int SPRITEROWS = 4, SPRITECOLS = 6;
-	private final int WIDTH = 128;
-	private final int HEIGHT = 128;
+	private int y, vely, velyInit = 3, accel = -4, t = 0;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128,
+			HEIGHT = 128;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
-	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true,
+			isJumping = false;
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH,
+				HEIGHT, SPRITEROWS, SPRITECOLS);
 		this.x = x;
 		this.y = y;
 		health = 10;
@@ -31,16 +29,25 @@ public class Player extends Entity {
 		setFocusable(true);
 	}
 
+	public void resetTime() {
+		this.t = 0;
+	}
+
 	public BufferedImage changeImages() // CHANGE THIS
 										// METHOD!-----------------------------------------------------------
 	{
 		counter++;
 		if (counter > 5) {
-			// System.out.println(this.y); //For debugging only.
-			if (isRunning) // I'm going to have images be returned differently
+			if (isJumping)
+			{
+				xSprite = 0;
+				ySprite = 3;
+			}
+			else if (isRunning) // I'm going to have images be returned differently
 							// depending on what the player is doing. This part
 							// is if it's running.
 			{
+				xSprite = 0;
 				if (ySprite != SPRITECOLS - 1 && velx != 0) {
 					ySprite++;
 				} else {
@@ -49,9 +56,19 @@ public class Player extends Entity {
 				counter = 0;
 			} else if (isAttacking) // This sprite is for when he's attacking.
 			{
+				xSprite = 1; // Both of the attacks are in the same row.
 				if (isStanding) {
-					for (int i = 0; i < 2; i++) {
-						return sheet.getImage(1, i);
+					for (int i = 0; i < 2; i++) { // Also modified this to
+													// appropriately change
+													// xSprite
+													// And ySprite instead of
+													// returning
+													// The image
+						if (ySprite == 0) {
+							ySprite = 1;
+						} else {
+							ySprite = 0;
+						}
 					}
 				} else {
 					for (int i = 2; i < 4; i++) {
@@ -61,45 +78,60 @@ public class Player extends Entity {
 			}
 		}
 		this.x += velx;
-
+		this.y += vely;
+		System.out.println("Velocity: " + vely + " Pos: " + this.y);
 		return sheet.getImage(xSprite, ySprite);
+	}
+
+	public boolean clearBelow() // Modify later to make it check below for
+								// platforms.
+	{
+		return true;
 	}
 
 	public void jump() { // Needs to get fixed.
 		
-		if (!isJumping) { //Need to make this method call itself. In progress
-			originalYPos = this.getY();
-			isJumping = true;
-			t = 0;
-			
-		} else {
-			t++;
-			this.y = originalYPos - ((initYVel*t) + (accel*t*t)/2);
-			
-			if (this.y >= originalYPos && t > 2)
-			{
-				
-			}else{
-				this.jump();
-			}
-		}
-
+		
+		
 		/*
-		 * for (int y = this.getY(); y >= originalPos - 60; y--) { try {
-		 * Thread.sleep(2); } catch (InterruptedException e) {
-		 * e.printStackTrace(); } this.setY(y); }
+		 * I have no idea how I'm going make this paint every time
+		 * it changes the y-velocity. This may be where threading is extremely important.
+		 * I should talk to Josh Crotts about this tomorrow and see what he thinks.
+		 * I know he's busy right now.
 		 * 
-		 * for (int y = getY(); y <= originalPos + 5; y++) { try {
-		 * Thread.sleep(2); } catch (InterruptedException e) {
-		 * e.printStackTrace(); } setY(y); }
-		 *
-		 * }
+		 * I need to sleep on this tonight because I just can't get it. A good
+		 * amount of work done today, however.
 		 */
+		
+		
+		// v = vi + at   ---- Physics ----
+		isJumping = true;
+		t++;
+		if (t % 4 == 0)
+		{
+			vely = (int) ((velyInit + accel * (t / 30)) * -1);
+			System.out.println(vely);
+		}
+		if (isClear(vely))
+		{
+			changeImages();
+			jump();
+		}else{
+			vely = 0;
+			isJumping = false;
+		}
+	}
+	
+	public boolean isClear(int v)
+	{
+		if (v > velyInit)
+		{
+			return false;
+		}
+		return true;
 	}
 
-	public boolean testBelow() {
-		// For now this will just return true, but later we will set this up to
-		// test for a collision.
+	public boolean onGround() {
 		return true;
 	}
 

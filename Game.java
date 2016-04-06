@@ -71,7 +71,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		switch (keyCode) {
 		case KeyEvent.VK_W:
 			wIsDown = true;
-			p.jump();
+			if(p.clearBelow())
+				p.resetTime();
+				p.jump();
 			break;
 		case KeyEvent.VK_S:
 			p.setY(p.getY() + 10);
@@ -92,7 +94,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isRunning = true;
 		}
 	}
-
+	
 	public boolean movingLeftOrRight() {
 		if (aIsDown == true || dIsDown == true) {
 			p.isRunning = true;
@@ -111,10 +113,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_D:
 			dIsDown = false;
 			break;
-		// case KeyEvent.VK_W:
-		// p.jump();
-		// wIsDown = false;
-		// break;
+		case KeyEvent.VK_W:
+			wIsDown = false;
+			break;
 		case KeyEvent.VK_S:
 			sIsDown = false;
 			break;
