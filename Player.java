@@ -9,11 +9,11 @@ public class Player extends Entity {
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
-
-	private int y, vely, velyInit = 18, accel = -23, t = 0;
+	
+	private int y, vely, velyInit = 15, accel = -20, t = 0, direction;
 
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128,
-			HEIGHT = 128;
+			HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
@@ -45,6 +45,8 @@ public class Player extends Entity {
 			} else {
 				vely = 0;
 				isJumping = false;
+				xSprite = 0;
+				ySprite = 0;
 			}
 		}
 
@@ -58,6 +60,7 @@ public class Player extends Entity {
 			// is if it's running.
 			{
 				xSprite = 0;
+				setVelx(RUNSPEED * direction);
 				if (ySprite != SPRITECOLS - 1 && velx != 0) {
 					ySprite++;
 				} else {
@@ -129,6 +132,11 @@ public class Player extends Entity {
 		}
 	}
 
+	public void setDirection(int dir)
+	{
+		direction = dir;
+	}
+	
 	public boolean onGround() {
 		return true;
 	}

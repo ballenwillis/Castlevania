@@ -80,11 +80,11 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			break;
 		case KeyEvent.VK_A:
 			aIsDown = true;
-			p.setVelx(-10);
+			p.setDirection(-1);
 			break;
 		case KeyEvent.VK_D:
 			dIsDown = true;
-			p.setVelx(10);
+			p.setDirection(1);
 			break;
 		case KeyEvent.VK_SPACE:
 			Audio whip1 = new Audio("soundeffects/whip1.wav");
@@ -122,7 +122,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 		if (!movingLeftOrRight())
-			p.setVelx(0);
+			p.setDirection(0);
 	}
 
 	public void keyTyped(KeyEvent arg0) {
