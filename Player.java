@@ -9,21 +9,18 @@ public class Player extends Entity {
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
-	
-	private int y, vely, velyInit = 15, accel = -20, t = 0, direction;
 
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128,
-			HEIGHT = 128, RUNSPEED = 10;
+	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1;
+
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
-	public boolean isRunning = false, isAttacking = false, isStanding = true,
-			isJumping = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH,
-				HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 		this.x = x;
 		this.y = y;
 		health = 10;
@@ -38,6 +35,8 @@ public class Player extends Entity {
 	public BufferedImage changeImages() // CHANGE THIS
 										// METHOD!-----------------------------------------------------------
 	{
+		BufferedImage oldImage;
+		
 		counter++;
 		if (isJumping) {
 			if (clearBelow()) {
@@ -54,7 +53,9 @@ public class Player extends Entity {
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
-			} else if (isRunning) // I'm going to have images be returned
+			} 
+			
+			else if (isRunning) // I'm going to have images be returned
 									// differently
 			// depending on what the player is doing. This part
 			// is if it's running.
@@ -67,7 +68,9 @@ public class Player extends Entity {
 					ySprite = 0;
 				}
 				counter = 0;
-			} else if (isAttacking) // This sprite is for when he's attacking.
+			} 
+			
+			else if (isAttacking) // This sprite is for when he's attacking.
 			{
 				xSprite = 1; // Both of the attacks are in the same row.
 				if (isStanding) {
@@ -79,22 +82,36 @@ public class Player extends Entity {
 													// The image
 						if (ySprite == 0) {
 							ySprite = 1;
-						} else {
+						} else {                    //This will not work
 							ySprite = 0;
 						}
 					}
 				} else {
 					for (int i = 2; i < 4; i++) {
-						return sheet.getImage(1, i);
+						return sheet.getImage(1, i); //This will not work
 					}
 				}
 			}
 		}
 		this.x += velx;
 		this.y += vely;
-		System.out.println("Velocity: " + vely + " Pos: " + this.y); // For
+		System.out.println(direction); // For
 																		// debugging
-		return sheet.getImage(xSprite, ySprite);
+		if (direction == 1)
+		{
+			oldImage = sheet.getImage(xSprite, ySprite);
+			return sheet.getImage(xSprite, ySprite); // Faces right if he's
+		}												// going right.
+		else //if (direction == -1)
+		{
+			oldImage = sheet.getImage(xSprite, ySprite);
+			return mirror(sheet.getImage(xSprite, ySprite)); // Faces left if
+		}														// he's going left.	
+	
+		/*
+		 * The problem with the random flipping needs to be fixed.
+		 */
+	
 	}
 
 	public boolean clearBelow() // Modify later to make it check below for
@@ -109,6 +126,17 @@ public class Player extends Entity {
 
 	public boolean clearAbove() {
 		return true;
+	}
+
+	public BufferedImage mirror(BufferedImage image) {
+		for (int i = 0; i < image.getWidth() / 2; i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				int tmp = image.getRGB(i, j);
+				image.setRGB(i, j, image.getRGB(image.getWidth() - i - 1, j)); //Set the one on the left to the right
+				image.setRGB(image.getWidth() - i - 1, j, tmp); //Set the one on the right to the left.
+			}
+		}
+		return image;
 	}
 
 	public void jump() { // Needs to get fixed.
@@ -132,11 +160,10 @@ public class Player extends Entity {
 		}
 	}
 
-	public void setDirection(int dir)
-	{
+	public void setDirection(int dir) {
 		direction = dir;
 	}
-	
+
 	public boolean onGround() {
 		return true;
 	}

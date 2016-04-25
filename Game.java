@@ -72,12 +72,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_W:
 			wIsDown = true;
 			if(p.clearBelow())
-				p.resetTime();
+				p.resetTime(); //Using v = v_i + a*t for velocity, so need to reset time.
 				p.jump();
 			break;
-		case KeyEvent.VK_S:
+		/*case KeyEvent.VK_S:
+			sIsDown = true;
 			p.setY(p.getY() + 10);
 			break;
+			*
+			* This is commented out because we don't need 'S' to do anything yet.
+			*/
 		case KeyEvent.VK_A:
 			aIsDown = true;
 			p.setDirection(-1);
