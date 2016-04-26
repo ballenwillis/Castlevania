@@ -84,10 +84,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			*/
 		case KeyEvent.VK_A:
 			aIsDown = true;
+			p.isStanding = false;
 			p.setDirection(-1);
 			break;
 		case KeyEvent.VK_D:
 			dIsDown = true;
+			p.isStanding = false;
 			p.setDirection(1);
 			break;
 		case KeyEvent.VK_SPACE:
@@ -125,8 +127,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			break;
 		}
 
-		if (!movingLeftOrRight())
-			p.setDirection(0);
+		if (!movingLeftOrRight() && !p.isJumping)
+			p.isStanding = true; //Changed this.
 	}
 
 	public void keyTyped(KeyEvent arg0) {

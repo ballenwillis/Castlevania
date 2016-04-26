@@ -10,9 +10,11 @@ public class Player extends Entity {
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
 
-	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1;
+	private BufferedImage oldImage;
+	
+	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; //RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
@@ -21,6 +23,7 @@ public class Player extends Entity {
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		oldImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
@@ -34,11 +37,9 @@ public class Player extends Entity {
 
 	public BufferedImage changeImages() // CHANGE THIS
 										// METHOD!-----------------------------------------------------------
-	{
-		BufferedImage oldImage;
-		
+	{	
 		counter++;
-		if (isJumping) {
+		if (isJumping) { //This probably needs to go in the counter.
 			if (clearBelow()) {
 				jump();
 			} else {
@@ -49,12 +50,17 @@ public class Player extends Entity {
 			}
 		}
 
-		if (counter >= 5) {
+		if (counter >= 5) { //Should be 5
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
 			} 
-			
+			else if (isStanding)
+			{
+				setVelx(0);
+				xSprite = 0;
+				ySprite = 0;
+			}
 			else if (isRunning) // I'm going to have images be returned
 									// differently
 			// depending on what the player is doing. This part
@@ -92,12 +98,25 @@ public class Player extends Entity {
 					}
 				}
 			}
+			System.out.println(direction);
+			if (direction == 1)
+			{
+				System.out.println("Going right");
+				oldImage = sheet.getImage(xSprite, ySprite);
+				return sheet.getImage(xSprite, ySprite); // Faces right if he's
+			}												// going right.
+			if (direction == -1) //if (direction == -1)
+			{
+				System.out.println("This should print");
+				oldImage = sheet.getFlippedImage(xSprite, ySprite);
+				return sheet.getFlippedImage(xSprite, ySprite); // Faces left if
+			}
 		}
 		this.x += velx;
 		this.y += vely;
-		System.out.println(direction); // For
+		 // For
 																		// debugging
-		if (direction == 1)
+		/*if (direction == 1)
 		{
 			oldImage = sheet.getImage(xSprite, ySprite);
 			return sheet.getImage(xSprite, ySprite); // Faces right if he's
@@ -106,11 +125,9 @@ public class Player extends Entity {
 		{
 			oldImage = sheet.getImage(xSprite, ySprite);
 			return mirror(sheet.getImage(xSprite, ySprite)); // Faces left if
-		}														// he's going left.	
-	
-		/*
-		 * The problem with the random flipping needs to be fixed.
-		 */
+		}*/
+		
+		return oldImage;
 	
 	}
 
@@ -128,7 +145,7 @@ public class Player extends Entity {
 		return true;
 	}
 
-	public BufferedImage mirror(BufferedImage image) {
+	/*public BufferedImage mirror(BufferedImage image) {
 		for (int i = 0; i < image.getWidth() / 2; i++) {
 			for (int j = 0; j < image.getHeight(); j++) {
 				int tmp = image.getRGB(i, j);
@@ -137,7 +154,7 @@ public class Player extends Entity {
 			}
 		}
 		return image;
-	}
+	}*/
 
 	public void jump() { // Needs to get fixed.
 
