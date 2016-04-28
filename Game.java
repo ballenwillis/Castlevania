@@ -71,7 +71,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		switch (keyCode) {
 		case KeyEvent.VK_W:
 			wIsDown = true;
-			if(p.clearBelow())
+			if(p.clearBelow() && !p.isJumping)
 				p.resetTime(); //Using v = v_i + a*t for velocity, so need to reset time.
 				p.jump();
 			break;
@@ -122,7 +122,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		if ((aIsDown || dIsDown) && !p.isJumping) //Switching from A to D quickly problem.
 			System.out.println("This is happening");
 			p.isRunning = true;
-			p.setVelx(0);
+			//p.setVelx(0);
 			p.isStanding = true; //Changed this.
 	}
 

@@ -37,21 +37,9 @@ public class SpriteSheet {
 			}
 			y += height;
 		}
-				 
-		/*for (int i = 0; i < images.length; i++) {
-			for (int j = 0; j < images[i].length; j++) {
-				flippedImages[i][j] = getImage(i, j);
-			}
-		}
-		
-		for (int i = 0; i < flippedImages.length; i++) {
-			for (int j = 0; j < flippedImages[i].length; j++) {
-				flippedImages[i][j] = mirror(flippedImages[i][j]);
-			}
-		}*/
 	}
 	
-	private static BufferedImage createRotated(BufferedImage image)
+	private static BufferedImage createRotated(BufferedImage image) 
     {
         AffineTransform at = AffineTransform.getRotateInstance(
             Math.PI, image.getWidth()/2, image.getHeight()/2.0);

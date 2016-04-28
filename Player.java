@@ -49,7 +49,8 @@ public class Player extends Entity {
 				ySprite = 0;
 			}
 		}
-
+		
+		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
 			if (isJumping) {
 				xSprite = 0;
@@ -102,13 +103,11 @@ public class Player extends Entity {
 			{
 				System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
-				//return sheet.getImage(xSprite, ySprite); // Faces right if he's
-			}												// going right.
+			}
 			else //if (direction == -1)
 			{
 				System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
-				//return sheet.getFlippedImage(xSprite, ySprite); // Faces left if
 			}
 			counter = 0;
 		}
@@ -131,18 +130,7 @@ public class Player extends Entity {
 	public boolean clearAbove() {
 		return true;
 	}
-
-	/*public BufferedImage mirror(BufferedImage image) {
-		for (int i = 0; i < image.getWidth() / 2; i++) {
-			for (int j = 0; j < image.getHeight(); j++) {
-				int tmp = image.getRGB(i, j);
-				image.setRGB(i, j, image.getRGB(image.getWidth() - i - 1, j)); //Set the one on the left to the right
-				image.setRGB(image.getWidth() - i - 1, j, tmp); //Set the one on the right to the left.
-			}
-		}
-		return image;
-	}*/
-
+	
 	public void jump() { // Needs to get fixed.
 		// v = vi + at ---- Physics ----
 		isJumping = true;
