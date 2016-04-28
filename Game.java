@@ -100,14 +100,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isRunning = true;
 		}
 	}
-	
-	public boolean movingLeftOrRight() {
-		if (aIsDown == true || dIsDown == true) {
-			p.isRunning = true;
-			return true;
-		}
-		return false;
-	}
 
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -127,7 +119,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			break;
 		}
 
-		if (!movingLeftOrRight() && !p.isJumping)
+		if ((aIsDown || dIsDown) && !p.isJumping) //Switching from A to D quickly problem.
+			System.out.println("This is happening");
+			p.isRunning = true;
+			p.setVelx(0);
 			p.isStanding = true; //Changed this.
 	}
 

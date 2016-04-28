@@ -10,7 +10,7 @@ public class Player extends Entity {
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
 
-	private BufferedImage oldImage;
+	private BufferedImage currentImage;
 	
 	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
@@ -23,7 +23,7 @@ public class Player extends Entity {
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
-		oldImage = sheet.getImage(0, 0);
+		currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
@@ -73,7 +73,6 @@ public class Player extends Entity {
 				} else {
 					ySprite = 0;
 				}
-				counter = 0;
 			} 
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
@@ -102,32 +101,20 @@ public class Player extends Entity {
 			if (direction == 1)
 			{
 				System.out.println("Going right");
-				oldImage = sheet.getImage(xSprite, ySprite);
-				return sheet.getImage(xSprite, ySprite); // Faces right if he's
+				currentImage = sheet.getImage(xSprite, ySprite);
+				//return sheet.getImage(xSprite, ySprite); // Faces right if he's
 			}												// going right.
-			if (direction == -1) //if (direction == -1)
+			else //if (direction == -1)
 			{
 				System.out.println("This should print");
-				oldImage = sheet.getFlippedImage(xSprite, ySprite);
-				return sheet.getFlippedImage(xSprite, ySprite); // Faces left if
+				currentImage = sheet.getFlippedImage(xSprite, ySprite);
+				//return sheet.getFlippedImage(xSprite, ySprite); // Faces left if
 			}
+			counter = 0;
 		}
 		this.x += velx;
 		this.y += vely;
-		 // For
-																		// debugging
-		/*if (direction == 1)
-		{
-			oldImage = sheet.getImage(xSprite, ySprite);
-			return sheet.getImage(xSprite, ySprite); // Faces right if he's
-		}												// going right.
-		else //if (direction == -1)
-		{
-			oldImage = sheet.getImage(xSprite, ySprite);
-			return mirror(sheet.getImage(xSprite, ySprite)); // Faces left if
-		}*/
-		
-		return oldImage;
+		return currentImage;
 	
 	}
 
@@ -157,17 +144,6 @@ public class Player extends Entity {
 	}*/
 
 	public void jump() { // Needs to get fixed.
-
-		/*
-		 * I have no idea how I'm going make this paint every time it changes
-		 * the y-velocity. This may be where threading is extremely important. I
-		 * should talk to Josh Crotts about this tomorrow and see what he
-		 * thinks. I know he's busy right now.
-		 * 
-		 * I need to sleep on this tonight because I just can't get it. A good
-		 * amount of work done today, however.
-		 */
-
 		// v = vi + at ---- Physics ----
 		isJumping = true;
 		t++;
