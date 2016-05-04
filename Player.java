@@ -52,16 +52,11 @@ public class Player extends Entity {
 		
 		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
+			System.out.println("Is running " + isRunning + " is Standing: " + isStanding);
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
 			} 
-			else if (isStanding)
-			{
-				setVelx(0);
-				xSprite = 0;
-				ySprite = 0;
-			}
 			else if (isRunning) // I'm going to have images be returned
 									// differently
 			// depending on what the player is doing. This part
@@ -74,7 +69,14 @@ public class Player extends Entity {
 				} else {
 					ySprite = 0;
 				}
-			} 
+			}
+			
+			else if (isStanding)
+			{
+				setVelx(0);
+				xSprite = 0;
+				ySprite = 0;
+			}
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
@@ -98,15 +100,15 @@ public class Player extends Entity {
 					}
 				}
 			}
-			System.out.println(direction);
+			//System.out.println(direction);
 			if (direction == 1)
 			{
-				System.out.println("Going right");
+				//System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			else //if (direction == -1)
 			{
-				System.out.println("This should print");
+				//System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;

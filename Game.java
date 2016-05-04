@@ -95,8 +95,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			Audio whip1 = new Audio("soundeffects/whip1.wav");
 			whip1.play();
+			break;
 		}
-		if (aIsDown == true || dIsDown == true) {
+		if (aIsDown || dIsDown) {
 			p.isRunning = true;
 		}
 	}
@@ -118,12 +119,23 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			sIsDown = false;
 			break;
 		}
-
-		if ((aIsDown || dIsDown) && !p.isJumping) //Switching from A to D quickly problem.
+		if (!aIsDown && !dIsDown) //This is where I have to fix things. Along with the below if statement.
+		{
+			if (!p.isJumping)
+			{
+				p.isRunning = false;
+				p.isStanding = true;
+			}
+		}
+		
+		if ((aIsDown || dIsDown) && !p.isJumping)
+		{
 			System.out.println("This is happening");
 			p.isRunning = true;
-			//p.setVelx(0);
-			p.isStanding = true; //Changed this.
+			//p.setVelx(p.);
+			p.isStanding = false; //Changed this.
+		}
+		
 	}
 
 	public void keyTyped(KeyEvent arg0) {
