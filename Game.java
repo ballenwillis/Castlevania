@@ -144,6 +144,35 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	@Override
+	public void update(Graphics g)
+	{
+		paint(g);
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		int newHealth = p.getHealth();
+		try {
+			Thread.sleep(17);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		p.changeImages();
+		//g.drawImage(image, p.getX(), p.getY(), null);
+		p.paintComponent(g);
+		
+		if (newHealth != oldHealth || loop == 0)
+		{
+			gui.paintComponent(g);
+		}
+		loop++;
+
+		pack();
+		repaint();
+	}
+	
+	/*@Override
 	public void paint(Graphics g) {
 		int newHealth = p.getHealth();
 		try {
@@ -169,7 +198,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		p.paintComponent(g);
 		loop++;
 		repaint();
-	}
+	}*/
 
 	public int getWIDTH() {
 		return WIDTH;

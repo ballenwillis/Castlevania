@@ -133,20 +133,9 @@ public class Player extends Entity {
 	}
 	
 	public void paintComponent(Graphics g) {
-		/*if (checkRepaint() || firstLoop)
-		{
-			super.paintComponent(g);
-			Graphics2D g2 = (Graphics2D) g;
-			BufferedImage image = changeImages();
-			g2.drawImage(image, x, y, null);
-		}
-		firstLoop = false;*/
-		
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		BufferedImage image = changeImages();
-		g2.drawImage(image, x, y, null);
-		System.out.println("Let's go");
+		g2.drawImage(currentImage, x, y, null);
 	}
 
 	public boolean clearBelow() // Modify later to make it check below for
