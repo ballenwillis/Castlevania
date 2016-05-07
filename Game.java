@@ -1,5 +1,6 @@
 package castlevania;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -154,6 +155,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		// System.out.println(p.getX() + ", " + p.getY());
 		if (loop == 0)
 		{
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
 			p.paintComponent(g);
 			gui.paintComponent(g);
 		}

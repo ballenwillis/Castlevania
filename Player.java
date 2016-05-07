@@ -40,9 +40,6 @@ public class Player extends Entity {
 		oldImage = sheet.getImage(0,0);
 	}
 
-	public void resetTime() {
-		this.t = 0;
-	}
 
 	public BufferedImage changeImages()
 	{	
@@ -150,7 +147,7 @@ public class Player extends Entity {
 		BufferedImage image = changeImages();
 		g2.drawImage(image, x, y, null);
 		System.out.println("Let's go");
-		}
+	}
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
@@ -164,6 +161,9 @@ public class Player extends Entity {
 
 	public boolean clearAbove() {
 		return true;
+	}
+	public void resetTime() {
+		this.t = 0;
 	}
 	
 	public void jump() { 
