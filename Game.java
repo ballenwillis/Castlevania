@@ -151,13 +151,19 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		BufferedImage image = p.changeImages();
 		// System.out.println(p.getX() + ", " + p.getY());
-		g.drawImage(image, p.getX(), p.getY(), null);
-		if (newHealth != oldHealth || loop == 0)
+		if (loop == 0)
 		{
+			p.paintComponent(g);
 			gui.paintComponent(g);
 		}
+		
+		if (newHealth != oldHealth)
+		{
+			gui.setPlayerHealth(newHealth);
+			gui.paintComponent(g);
+		}
+		p.paintComponent(g);
 		loop++;
 		repaint();
 	}

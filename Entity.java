@@ -2,6 +2,7 @@ package castlevania;
 
 import javax.swing.JComponent;
 
+
 public abstract class Entity extends JComponent{
 
 	private static final long serialVersionUID = 9043644151166500825L;

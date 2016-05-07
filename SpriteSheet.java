@@ -77,15 +77,4 @@ public class SpriteSheet {
 	{
 		return flippedImages[i][j];
 	}
-	
-	public static BufferedImage mirror(BufferedImage image) { //This flips the image
-		for (int i = 0; i < image.getWidth() / 2; i++) {
-			for (int j = 0; j < image.getHeight(); j++) {
-				int tmp = image.getRGB(i, j);
-				image.setRGB(i, j, image.getRGB(image.getWidth() - i - 1, j)); //Set the one on the left to the right
-				image.setRGB(image.getWidth() - i - 1, j, tmp); //Set the one on the right to the left.
-			}
-		}
-		return image;
-	}
 }

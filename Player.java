@@ -1,5 +1,10 @@
 package castlevania;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -10,7 +15,9 @@ public class Player extends Entity {
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
 
-	private BufferedImage currentImage;
+	private boolean firstLoop = true; //For paint method.
+	
+	private BufferedImage currentImage, oldImage;
 	
 	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
@@ -22,22 +29,24 @@ public class Player extends Entity {
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.jpg", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 		currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
+		
+		oldImage = sheet.getImage(0,0);
 	}
 
 	public void resetTime() {
 		this.t = 0;
 	}
 
-	public BufferedImage changeImages() // CHANGE THIS
-										// METHOD!-----------------------------------------------------------
+	public BufferedImage changeImages()
 	{	
+		oldImage = currentImage;
 		counter++;
 		if (isJumping) { //This probably needs to go in the counter.
 			if (clearBelow()) {
@@ -52,11 +61,16 @@ public class Player extends Entity {
 		
 		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
-			System.out.println("Is running " + isRunning + " is Standing: " + isStanding);
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
 			} 
+			else if (isStanding)
+			{
+				setVelx(0);
+				xSprite = 0;
+				ySprite = 0;
+			}
 			else if (isRunning) // I'm going to have images be returned
 									// differently
 			// depending on what the player is doing. This part
@@ -69,14 +83,7 @@ public class Player extends Entity {
 				} else {
 					ySprite = 0;
 				}
-			}
-			
-			else if (isStanding)
-			{
-				setVelx(0);
-				xSprite = 0;
-				ySprite = 0;
-			}
+			} 
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
@@ -100,15 +107,15 @@ public class Player extends Entity {
 					}
 				}
 			}
-			//System.out.println(direction);
+			System.out.println(direction);
 			if (direction == 1)
 			{
-				//System.out.println("Going right");
+				System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			else //if (direction == -1)
 			{
-				//System.out.println("This should print");
+				System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;
@@ -118,6 +125,32 @@ public class Player extends Entity {
 		return currentImage;
 	
 	}
+
+	public boolean checkRepaint()
+	{
+		if (currentImage == oldImage)
+			return false;
+		if (velx != 0 || vely != 0)
+			return false;
+		return true;
+	}
+	
+	public void paintComponent(Graphics g) {
+		/*if (checkRepaint() || firstLoop)
+		{
+			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g;
+			BufferedImage image = changeImages();
+			g2.drawImage(image, x, y, null);
+		}
+		firstLoop = false;*/
+		
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		BufferedImage image = changeImages();
+		g2.drawImage(image, x, y, null);
+		System.out.println("Let's go");
+		}
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
@@ -133,7 +166,7 @@ public class Player extends Entity {
 		return true;
 	}
 	
-	public void jump() { // Needs to get fixed.
+	public void jump() { 
 		// v = vi + at ---- Physics ----
 		isJumping = true;
 		t++;
