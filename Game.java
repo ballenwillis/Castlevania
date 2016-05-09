@@ -1,5 +1,6 @@
 package castlevania;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -13,7 +14,6 @@ import javax.swing.JFrame;
 
 public class Game extends JFrame implements Runnable, KeyListener {
 
-	private static final long serialVersionUID = 4479977257939491351L;
 	private final int WIDTH = 800, HEIGHT = 600;
 	private boolean running = false;
 	private Player p;
@@ -21,20 +21,18 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private GUI gui;
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
-
-	private Level[] levels = new Level[4];
-
+	
+	private Level[] levels = { 
+			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")) 
+			};
+	
 	private int oldHealth, loop = 0;
-
+	
 	public Game() {
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
-		try{
-			doLevels();
-		}catch(Exception e){
-			e.printStackTrace();}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -57,23 +55,17 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				Thread.sleep(17);
+				repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//repaint();
 		}
 	}
 
 	public void stop() {
 		running = false;
-	}
-
-	public void doLevels() throws IOException
-	{
-		this.levels[0] = new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav"));
-		this.levels[1] = new Level("levels/level2bg.png", new Audio("music/monsterdance.wav"));
-		this.levels[2] = new Level("levels/level3bg.png", new Audio("music/vampirekiller.wav"));
-		this.levels[3] = new Level("levels/level4bg.png", new Audio("music/vampirekiller.wav"));
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -84,15 +76,15 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			wIsDown = true;
 			if(p.clearBelow() && !p.isJumping)
 				p.resetTime(); //Using v = v_i + a*t for velocity, so need to reset time.
-			p.jump();
+				p.jump();
 			break;
-			/*case KeyEvent.VK_S:
+		/*case KeyEvent.VK_S:
 			sIsDown = true;
 			p.setY(p.getY() + 10);
 			break;
-			 *
-			 * This is commented out because we don't need 'S' to do anything yet.
-			 */
+			*
+			* This is commented out because we don't need 'S' to do anything yet.
+			*/
 		case KeyEvent.VK_A:
 			aIsDown = true;
 			p.isStanding = false;
@@ -106,8 +98,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			Audio whip1 = new Audio("soundeffects/whip1.wav");
 			whip1.play();
+			break;
 		}
-		if (aIsDown == true || dIsDown == true) {
+		if (aIsDown || dIsDown) {
 			p.isRunning = true;
 		}
 	}
@@ -129,12 +122,23 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			sIsDown = false;
 			break;
 		}
-
-		if ((aIsDown || dIsDown) && !p.isJumping) //Switching from A to D quickly problem.
+		if (!aIsDown && !dIsDown) //This is where I have to fix things. Along with the below if statement.
+		{
+			if (!p.isJumping)
+			{
+				p.isRunning = false;
+				p.isStanding = true;
+			}
+		}
+		
+		if ((aIsDown || dIsDown) && !p.isJumping)
+		{
 			System.out.println("This is happening");
-		p.isRunning = true;
-		//p.setVelx(0);
-		p.isStanding = true; //Changed this.
+			p.isRunning = true;
+			//p.setVelx(p.);
+			p.isStanding = false; //Changed this.
+		}
+		
 	}
 
 	public void keyTyped(KeyEvent arg0) {
@@ -142,39 +146,56 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	@Override
+	public void update(Graphics g)
+	{
+		paint(g);
+	}
+	
 	public void paint(Graphics g) {
+		super.paint(g);
 		int newHealth = p.getHealth();
-		BufferedImage level1 = null;
-		try {
-			level1 = ImageIO.read(new File("levels/level1bg.png"));
-			g.drawImage(level1, 0, 0, null);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		pack();
-		try {
-			Thread.sleep(17);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		BufferedImage image = p.changeImages();
-		/*if(p.getX() > 20)
-			levels[0].setX(levels[0].getX()+10);*/
-
-
-		// System.out.println(p.getX() + ", " + p.getY());
-		g.drawImage(image, p.getX(), p.getY(), null);
-
+		p.changeImages();
+		//g.drawImage(image, p.getX(), p.getY(), null);
+		p.paintComponent(g);
+		
 		if (newHealth != oldHealth || loop == 0)
 		{
 			gui.paintComponent(g);
 		}
 		loop++;
 
+		pack();
+		
 		repaint();
 	}
+	
+	/*@Override
+	public void paint(Graphics g) {
+		int newHealth = p.getHealth();
+		try {
+			Thread.sleep(17);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// System.out.println(p.getX() + ", " + p.getY());
+		if (loop == 0)
+		{
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			p.paintComponent(g);
+			gui.paintComponent(g);
+		}
+		
+		if (newHealth != oldHealth)
+		{
+			gui.setPlayerHealth(newHealth);
+			gui.paintComponent(g);
+		}
+		p.paintComponent(g);
+		loop++;
+		repaint();
+	}*/
 
 	public int getWIDTH() {
 		return WIDTH;

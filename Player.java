@@ -1,16 +1,22 @@
 package castlevania;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player extends Entity {
+import javax.swing.JComponent;
+
+public class Player extends JComponent {
 
 	private static final long serialVersionUID = -5471880502989465049L;
 	private static int counter = 0;
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
 
-	private BufferedImage currentImage;
+	private boolean firstLoop = true; //For paint method.
+	
+	private BufferedImage currentImage, oldImage;
 	
 	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
@@ -29,15 +35,14 @@ public class Player extends Entity {
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
+		setDoubleBuffered(true);
+		oldImage = sheet.getImage(0,0);
 	}
 
-	public void resetTime() {
-		this.t = 0;
-	}
 
-	public BufferedImage changeImages() // CHANGE THIS
-										// METHOD!-----------------------------------------------------------
+	public BufferedImage changeImages()
 	{	
+		oldImage = currentImage;
 		counter++;
 		if (isJumping) { //This probably needs to go in the counter.
 			if (clearBelow()) {
@@ -102,7 +107,6 @@ public class Player extends Entity {
 			if (direction == 1)
 			{
 				System.out.println("Going right");
-				System.out.println(x);//prints x value
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			else //if (direction == -1)
@@ -118,6 +122,22 @@ public class Player extends Entity {
 	
 	}
 
+	public boolean checkRepaint()
+	{
+		if (currentImage == oldImage)
+			return false;
+		if (velx != 0 || vely != 0)
+			return false;
+		return true;
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.drawImage(this.currentImage,x,y,null);
+	}
+
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
 	{
@@ -131,8 +151,11 @@ public class Player extends Entity {
 	public boolean clearAbove() {
 		return true;
 	}
+	public void resetTime() {
+		this.t = 0;
+	}
 	
-	public void jump() { // Needs to get fixed.
+	public void jump() { 
 		// v = vi + at ---- Physics ----
 		isJumping = true;
 		t++;
@@ -214,12 +237,12 @@ public class Player extends Entity {
 		return SPRITECOLS;
 	}
 
-	@Override
+	
 	public SpriteSheet getSheet() {
 		return sheet;
 	}
 
-	@Override
+	
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
 	}
