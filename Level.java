@@ -1,6 +1,7 @@
 package castlevania;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Level extends JComponent{
 	{
 		try{
 		this.image = ImageIO.read(new File(level));
-		}catch(Exception e){e.printStackTrace();}
+		}catch(Exception e){System.out.println("ERROR: LEVEL FILE NOT FOUND.");}
 		this.obstacles = new ArrayList<Entity>();
 		this.music = music;
 		this.x = 0;
@@ -36,10 +37,19 @@ public class Level extends JComponent{
 		music.play();
 		
 	}
+	public Level(String level)
+	{
+		try{
+		this.image = ImageIO.read(new File(level));
+		}catch(Exception e){System.out.println("ERROR: LEVEL FILE NOT FOUND.");}
+		this.obstacles = new ArrayList<Entity>();
+		this.x = 0;
+		this.y = 0;
+	}
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(image,x,y,null);
-		repaint();
+		Graphics2D g2 = (Graphics2D) g;
+		g2.drawImage(image, 0,0,null);
 	}
 	public BufferedImage getImage() {
 		return image;

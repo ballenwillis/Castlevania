@@ -39,14 +39,14 @@ public class SpriteSheet {
 		}
 	}
 	
-	private static BufferedImage createRotated(BufferedImage image) 
+	public static BufferedImage createRotated(BufferedImage image) 
     {
         AffineTransform at = AffineTransform.getRotateInstance(
             Math.PI, image.getWidth()/2, image.getHeight()/2.0);
         return createTransformed(image, at);
     }    
 	
-	private static BufferedImage createFlipped(BufferedImage image)
+	public static BufferedImage createFlipped(BufferedImage image)
     {
         AffineTransform at = new AffineTransform();
         at.concatenate(AffineTransform.getScaleInstance(1, -1));

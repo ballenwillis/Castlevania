@@ -1,15 +1,11 @@
 package castlevania;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class Game extends JFrame implements Runnable, KeyListener {
@@ -22,9 +18,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
 	
-	private Level[] levels = { 
-			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")) 
-			};
+//	private Level[] levels = { 
+//			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")) 
+//			};
 	
 	private int oldHealth, loop = 0;
 	
@@ -54,7 +50,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 		while (running) {
 			try {
-				Thread.sleep(17);
+				Thread.sleep(25L);
 				repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -98,6 +94,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			Audio whip1 = new Audio("soundeffects/whip1.wav");
 			whip1.play();
+			//g.drawImage(p.getSheet().getImage(0,1),p.getX(),p.getY(), null);
+			p.isSpacePressed = true;
 			break;
 		}
 		if (aIsDown || dIsDown) {
@@ -148,15 +146,17 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	@Override
 	public void update(Graphics g)
 	{
-		paint(g);
+		super.paint(g);
 	}
 	
+	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		int newHealth = p.getHealth();
 		p.changeImages();
 		//g.drawImage(image, p.getX(), p.getY(), null);
-		p.paintComponent(g);
+		if(!p.checkRepaint())
+			p.paintComponent(g);
 		
 		if (newHealth != oldHealth || loop == 0)
 		{
@@ -166,7 +166,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 		pack();
 		
-		repaint();
+		//repaint();
 	}
 	
 	/*@Override

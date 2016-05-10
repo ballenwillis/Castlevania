@@ -24,7 +24,7 @@ public class Player extends JComponent {
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
-	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
 
 	public Player(int x, int y) {
 		super();
@@ -44,6 +44,19 @@ public class Player extends JComponent {
 	{	
 		oldImage = currentImage;
 		counter++;
+		if(isSpacePressed)
+		{
+			currentImage = sheet.getImage(0,1);
+			try{
+				Thread.sleep(17);
+			}catch(InterruptedException e){};
+			if(direction != -1)
+				currentImage = (sheet.getImage(1,1));
+			else
+				currentImage = sheet.getFlippedImage(1,1);
+			
+			isSpacePressed = false;
+		}
 		if (isJumping) { //This probably needs to go in the counter.
 			if (clearBelow()) {
 				jump();
@@ -169,6 +182,15 @@ public class Player extends JComponent {
 		direction = dir;
 	}
 
+	public void setImage(int x, int y)
+	{
+		currentImage = sheet.getImage(x,y);
+	}
+	
+	public BufferedImage getImageWithXAndY(int x, int y)
+	{
+		return sheet.getImage(x,y);
+	}
 	public boolean onGround() {
 		return true;
 	}
