@@ -21,10 +21,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			dIsDown = false;
 	private Image dbImage;
 	private Graphics dbg;
-//	private Level[] levels = { 
-//			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")) 
-//			};
+	//private LevelList levels = new LevelList();
 	
+	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav"))};
 	private int oldHealth, loop = 0;
 	
 	public Game() {
@@ -37,7 +36,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
 		add(p);
 		add(gui);
-		
 		setLocationRelativeTo(null);
 		setFocusable(true);
 		setResizable(false);
@@ -57,7 +55,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(25L);
+				Thread.sleep(17L);
 				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -160,20 +158,17 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public void paint(Graphics g) {
 		dbImage = createImage(getWIDTH(), getHEIGHT());
 		dbg = dbImage.getGraphics();
+		
 		paintComponent(dbg);
 		g.drawImage(dbImage, 0, 0, this);
 	}
 	public void paintComponent(Graphics g){
 	
+		levels[0].paintComponent(g);
 		p.changeImages();
 		g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-		try {
-			Thread.sleep(17);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		gui.paintComponent(g);
+		
 		//repaint();
 		
 	}

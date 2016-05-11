@@ -87,7 +87,7 @@ public class Player extends JComponent {
 			{
 				xSprite = 0;
 				setVelx(RUNSPEED * direction);
-				if (ySprite != SPRITECOLS - 1 && velx != 0) {
+				if (ySprite != SPRITECOLS - 2 && velx != 0) {
 					ySprite++;
 				} else {
 					ySprite = 0;
