@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements Runnable, KeyListener {
 
@@ -141,7 +142,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//p.setVelx(p.);
 			p.isStanding = false; //Changed this.
 		}
-		
+
 	}
 
 	public void keyTyped(KeyEvent arg0) {
@@ -164,12 +165,31 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 	public void paintComponent(Graphics g){
 	
+		if(p.getX() <= 0)
+			p.setX(0);
+		
+		if(p.getX() > 330)
+		{
+			p.setX(330);
+			levels[0].scrollImage();
+			levels[0].paintComponent(g);
+		}
+		
+		if(Math.abs(levels[0].getX()) > 7170){
+			p.setX(getX());
+			levels[0].stopScroll();
+			JOptionPane.showMessageDialog(null, "YOU BEAT LEVEL ONE.");
+			levels[0].setX();
+			System.exit(0);
+		}
+		
+		else{
 		levels[0].paintComponent(g);
+		
 		p.changeImages();
 		g.drawImage(p.getImage(), p.getX(), p.getY(), this);
 		gui.paintComponent(g);
-		
-		//repaint();
+		}
 		
 	}
 	/*@Override

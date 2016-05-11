@@ -58,7 +58,7 @@ public class Player extends JComponent {
 			isSpacePressed = false;
 		}
 		if (isJumping) { //This probably needs to go in the counter.
-			if (clearBelow()) {
+			if (clearBelow() && clearAbove()) {
 				jump();
 			} else {
 				vely = 0;
@@ -179,6 +179,7 @@ public class Player extends JComponent {
 	
 	public void jump() { 
 		// v = vi + at ---- Physics ----
+		System.out.println("IS JUMPING");
 		isJumping = true;
 		t++;
 		if (t % 4 == 0) {
