@@ -2,6 +2,7 @@ package castlevania;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
@@ -14,10 +15,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private boolean running = false;
 	private Player p;
 	private Graphics g;
+	private Thread t;
 	private GUI gui;
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
-	
+	private Image dbImage;
+	private Graphics dbg;
 //	private Level[] levels = { 
 //			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")) 
 //			};
@@ -32,11 +35,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		add(p);
 		add(gui);
+		
 		setLocationRelativeTo(null);
 		setFocusable(true);
 		setResizable(false);
 		pack();
+		t = new Thread(this);
 		setVisible(true);
 		addKeyListener(this);
 	}
@@ -50,8 +56,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 		while (running) {
 			try {
-				Thread.sleep(25L);
 				repaint();
+				Thread.sleep(25L);
+				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -151,24 +158,25 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
-		int newHealth = p.getHealth();
-		p.changeImages();
-		//g.drawImage(image, p.getX(), p.getY(), null);
-		if(!p.checkRepaint())
-			p.paintComponent(g);
-		
-		if (newHealth != oldHealth || loop == 0)
-		{
-			gui.paintComponent(g);
-		}
-		loop++;
-
-		pack();
-		
-		//repaint();
+		dbImage = createImage(getWIDTH(), getHEIGHT());
+		dbg = dbImage.getGraphics();
+		paintComponent(dbg);
+		g.drawImage(dbImage, 0, 0, this);
 	}
+	public void paintComponent(Graphics g){
 	
+		p.changeImages();
+		g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+		try {
+			Thread.sleep(17);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gui.paintComponent(g);
+		//repaint();
+		
+	}
 	/*@Override
 	public void paint(Graphics g) {
 		int newHealth = p.getHealth();

@@ -2,8 +2,6 @@ package castlevania;
 
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
 public abstract class Item extends Entity {
 
 	private static final long serialVersionUID = -1265818783182436592L;
@@ -14,7 +12,7 @@ public abstract class Item extends Entity {
 	
 	public Item(String itemType, SpriteSheet sheet, BufferedImage image)
 	{
-		this.sheet = sheet;
+		super(sheet);
 		this.itemType = itemType;
 		this.image = image;
 	}
@@ -53,8 +51,8 @@ public abstract class Item extends Entity {
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
 	}
-	
-	public BufferedImage returnImage() {
+
+	public BufferedImage getImage() {
 		return image;
 	}
 

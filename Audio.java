@@ -17,12 +17,12 @@ public class Audio {
 	{
 		this.fileName = fileName;
 		try{
-		File audioFile = new File(fileName);
-		AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-		AudioFormat format = audioStream.getFormat();
-		DataLine.Info info = new DataLine.Info(Clip.class, format);
-		audioClip = (Clip) AudioSystem.getLine(info);
-		audioClip.open(audioStream);
+			File audioFile = new File(fileName);
+			AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+			AudioFormat format = audioStream.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			audioClip = (Clip) AudioSystem.getLine(info);
+			audioClip.open(audioStream);
 		}catch(Exception e)
 		{
 			e.printStackTrace();

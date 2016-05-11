@@ -1,9 +1,7 @@
 package castlevania;
 
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+
 
 public abstract class Entity extends JComponent{
 
@@ -11,7 +9,6 @@ public abstract class Entity extends JComponent{
 	private int width;
 	private int height;
 	private SpriteSheet sheet;
-	private BufferedImage image;
 	
 	public Entity(int width, int height, SpriteSheet sheet)
 	{
@@ -22,11 +19,6 @@ public abstract class Entity extends JComponent{
 	public Entity(SpriteSheet sheet)
 	{
 		this.sheet = sheet;
-	}
-	
-	public Entity(BufferedImage image)
-	{
-		this.image = image;
 	}
 
 	public Entity() {
@@ -54,10 +46,5 @@ public abstract class Entity extends JComponent{
 
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
-	}
-	
-	public BufferedImage getImage()
-	{
-		return image;
 	}
 }

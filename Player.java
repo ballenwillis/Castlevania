@@ -2,6 +2,7 @@ package castlevania;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -20,6 +21,8 @@ public class Player extends JComponent {
 	
 	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
+	private Image dbImage;
+	private Graphics dbg;
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; //RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private int health;
@@ -29,14 +32,14 @@ public class Player extends JComponent {
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet_without_bg.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
-		currentImage = sheet.getImage(0, 0);
+		//currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
-		setDoubleBuffered(true);
-		oldImage = sheet.getImage(0,0);
+		//setDoubleBuffered(true);
+		//oldImage = sheet.getImage(0,0);
 	}
 
 
@@ -47,9 +50,6 @@ public class Player extends JComponent {
 		if(isSpacePressed)
 		{
 			currentImage = sheet.getImage(0,1);
-			try{
-				Thread.sleep(17);
-			}catch(InterruptedException e){};
 			if(direction != -1)
 				currentImage = (sheet.getImage(1,1));
 			else
@@ -144,12 +144,21 @@ public class Player extends JComponent {
 		return true;
 	}
 	
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.drawImage(this.currentImage,x,y,null);
-	}
+	
+//	public void paint(Graphics g)
+//	{
+//		dbImage = createImage(getWIDTH(), getHEIGHT());
+//		dbg = dbImage.getGraphics();
+//		paintComponent(dbg);
+//		g.drawImage(dbImage, 0, 0, this);
+//	}
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		//super.paintComponent(g);
+//		Graphics2D g2 = (Graphics2D) g;
+//		g2.drawImage(this.currentImage,x,y,this);
+//		repaint();
+//	}
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
@@ -291,5 +300,10 @@ public class Player extends JComponent {
 
 	public int getVelx() {
 		return this.velx;
+	}
+	
+	public BufferedImage getImage()
+	{
+		return currentImage;
 	}
 }
