@@ -1,14 +1,14 @@
 package castlevania;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player extends Entity {
+import javax.swing.JComponent;
+
+public class Player extends JComponent {
 
 	private static final long serialVersionUID = -5471880502989465049L;
 	private static int counter = 0;
@@ -21,23 +21,25 @@ public class Player extends Entity {
 	
 	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
 
+	private Image dbImage;
+	private Graphics dbg;
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; //RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
-	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
-		currentImage = sheet.getImage(0, 0);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet_without_bg.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		//currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
-		
-		oldImage = sheet.getImage(0,0);
+		//setDoubleBuffered(true);
+		//oldImage = sheet.getImage(0,0);
 	}
 
 
@@ -45,8 +47,18 @@ public class Player extends Entity {
 	{	
 		oldImage = currentImage;
 		counter++;
+		if(isSpacePressed)
+		{
+			currentImage = sheet.getImage(0,1);
+			if(direction != -1)
+				currentImage = (sheet.getImage(1,1));
+			else
+				currentImage = sheet.getFlippedImage(1,1);
+			
+			isSpacePressed = false;
+		}
 		if (isJumping) { //This probably needs to go in the counter.
-			if (clearBelow()) {
+			if (clearBelow() && clearAbove()) {
 				jump();
 			} else {
 				vely = 0;
@@ -75,7 +87,7 @@ public class Player extends Entity {
 			{
 				xSprite = 0;
 				setVelx(RUNSPEED * direction);
-				if (ySprite != SPRITECOLS - 1 && velx != 0) {
+				if (ySprite != SPRITECOLS - 2 && velx != 0) {
 					ySprite++;
 				} else {
 					ySprite = 0;
@@ -132,11 +144,21 @@ public class Player extends Entity {
 		return true;
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.drawImage(currentImage, x, y, null);
-	}
+	
+//	public void paint(Graphics g)
+//	{
+//		dbImage = createImage(getWIDTH(), getHEIGHT());
+//		dbg = dbImage.getGraphics();
+//		paintComponent(dbg);
+//		g.drawImage(dbImage, 0, 0, this);
+//	}
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		//super.paintComponent(g);
+//		Graphics2D g2 = (Graphics2D) g;
+//		g2.drawImage(this.currentImage,x,y,this);
+//		repaint();
+//	}
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
@@ -157,6 +179,7 @@ public class Player extends Entity {
 	
 	public void jump() { 
 		// v = vi + at ---- Physics ----
+		System.out.println("IS JUMPING");
 		isJumping = true;
 		t++;
 		if (t % 4 == 0) {
@@ -169,6 +192,15 @@ public class Player extends Entity {
 		direction = dir;
 	}
 
+	public void setImage(int x, int y)
+	{
+		currentImage = sheet.getImage(x,y);
+	}
+	
+	public BufferedImage getImageWithXAndY(int x, int y)
+	{
+		return sheet.getImage(x,y);
+	}
 	public boolean onGround() {
 		return true;
 	}
@@ -237,12 +269,12 @@ public class Player extends Entity {
 		return SPRITECOLS;
 	}
 
-	@Override
+	
 	public SpriteSheet getSheet() {
 		return sheet;
 	}
 
-	@Override
+	
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
 	}
@@ -269,5 +301,10 @@ public class Player extends Entity {
 
 	public int getVelx() {
 		return this.velx;
+	}
+	
+	public BufferedImage getImage()
+	{
+		return currentImage;
 	}
 }

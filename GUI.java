@@ -21,7 +21,7 @@ public class GUI extends JComponent {
 
 	public GUI() {
 		for (int i = 0, x = 120; i < 10; i++, x += 18) {
-			Rectangle rect = new Rectangle(x, 40, 12, 30);
+			Rectangle rect = new Rectangle(x, 43, 12, 30);
 			playerHealthBar.add(rect);
 		}
 		playerHealth = 10;
@@ -32,7 +32,7 @@ public class GUI extends JComponent {
 	{
 		playerHealth = h;
 	}
-	
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
@@ -42,12 +42,12 @@ public class GUI extends JComponent {
 
 		GradientPaint grad = new GradientPaint(0, 0, black1, 1300, 400, black2);
 		g2.setPaint(grad);
-		g2.fillRect(0, 0, 800, 80);
+		g2.fillRect(0, 0, 800, 90);
 
 		Font f = new Font("Georgia", Font.PLAIN, 22);
 		g2.setColor(Color.BLACK);
 		g2.setFont(f);
-		g2.drawString("HEALTH:", 15, 63);
+		g2.drawString("HEALTH:", 15, 68);
 		for (int i = 0; i < playerHealth; i++) {
 			g2.setColor(Color.RED);
 			g2.fill(playerHealthBar.get(i));
