@@ -1,5 +1,6 @@
 package castlevania;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,29 +11,54 @@ import javax.swing.JComponent;
 
 public class Level extends JComponent{
 
+	private static final long serialVersionUID = 1737878072499692441L;
 	private BufferedImage image;
 	private boolean loading;
 	private boolean won;
 	private Audio music;
+	private int x = 0;
+	private int y = 0;
+	private String levelName;
+	private Thread t = new Thread();
 	private ArrayList<Entity> obstacles;
-	
+
 	public Level(String level, Audio music)
 	{
+		this.levelName = level;
 		try {
 			this.setImage(ImageIO.read(new File(level)));
 		} catch (IOException e) {
 
 			System.out.println("Error Opening Level File.");
 		}
-		
+
 		this.obstacles = new ArrayList<Entity>();
 		this.music = music;
-		music.play();
-		
+		//music.play();
+		t.start();
+
 	}
-	public void loadLevel(int index)
+	//	public void loadLevel(int index)
+	//	{
+	//		
+	//	}
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.drawImage(image,x,y,null);
+		repaint();
+	}
+	
+	public void scrollImage()
 	{
-		
+		this.x -= 10;
+	}
+	public void stopScroll()
+	{
+		this.x = getX();
+	}
+	public String getLevelName(){
+		return levelName;
 	}
 	public BufferedImage getImage() {
 		return image;
@@ -41,7 +67,7 @@ public class Level extends JComponent{
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
-	
+
 	public boolean isLoading()
 	{
 		return loading;
@@ -66,14 +92,38 @@ public class Level extends JComponent{
 	public void setMusic(Audio music) {
 		this.music = music;
 	}
-	
+
 	public void addObstacle(Entity obj)
 	{
 		obstacles.add(obj);
 	}
-	
+
 	public void removeObstacle(Entity obj)
 	{
 		obstacles.remove(obj);
 	}
+
+	public String toString()
+	{
+		return "Level: " + levelName +"\nMusic: "+ music.getFileName();
+	}
+	
+	public void play()
+	{
+		this.music.play();
+	}
+	public int getX()
+	{
+		//System.out.println(x);
+		return x;
+	}
+	public void setX()
+	{
+		this.x = 0;
+	}
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+
 }

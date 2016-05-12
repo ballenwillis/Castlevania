@@ -56,19 +56,14 @@ public class Player extends JComponent {
 				currentImage = sheet.getFlippedImage(1,1);
 			
 			isSpacePressed = false;
+			return currentImage;
 		}
 		if (isJumping) { //This probably needs to go in the counter.
-			if (clearBelow()) {
+			if (clearBelow() && clearAbove()) {
 				jump();
 			} else {
 				vely = 0;
 				isJumping = false;
-				if (Game.aIsDown || Game.dIsDown)
-				{
-					isRunning = true;
-				}else{
-					isStanding = true;
-				}
 				xSprite = 0;
 				ySprite = 0;
 			}
@@ -93,7 +88,7 @@ public class Player extends JComponent {
 			{
 				xSprite = 0;
 				setVelx(RUNSPEED * direction);
-				if (ySprite != SPRITECOLS - 1 && velx != 0) {
+				if (ySprite != SPRITECOLS - 2 && velx != 0) {
 					ySprite++;
 				} else {
 					ySprite = 0;
@@ -122,15 +117,15 @@ public class Player extends JComponent {
 					}
 				}
 			}
-			System.out.println(direction);
+			//System.out.println(direction);
 			if (direction == 1)
 			{
-				System.out.println("Going right");
+				//System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			else //if (direction == -1)
 			{
-				System.out.println("This should print");
+				//System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;
@@ -185,11 +180,12 @@ public class Player extends JComponent {
 	
 	public void jump() { 
 		// v = vi + at ---- Physics ----
+		//System.out.println("IS JUMPING");
 		isJumping = true;
 		t++;
 		if (t % 4 == 0) {
 			vely = (int) ((velyInit + accel * ((double) (t / 30.0))) * -1);
-			System.out.println(vely);
+			//System.out.println(vely);
 		}
 	}
 
@@ -241,10 +237,6 @@ public class Player extends JComponent {
 	public void removeItem(Item item) {
 		items.remove(item);
 	}
-	public BufferedImage getImage()
-	{
-		return currentImage;
-	}
 
 	public static int getCounter() {
 		return counter;
@@ -278,10 +270,12 @@ public class Player extends JComponent {
 		return SPRITECOLS;
 	}
 
+	
 	public SpriteSheet getSheet() {
 		return sheet;
 	}
 
+	
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
 	}
@@ -308,5 +302,10 @@ public class Player extends JComponent {
 
 	public int getVelx() {
 		return this.velx;
+	}
+	
+	public BufferedImage getImage()
+	{
+		return currentImage;
 	}
 }
