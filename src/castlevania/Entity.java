@@ -1,7 +1,8 @@
 package castlevania;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-
 
 public abstract class Entity extends JComponent{
 
@@ -10,6 +11,12 @@ public abstract class Entity extends JComponent{
 	private int height;
 	private SpriteSheet sheet;
 	
+	/**Entities are ANY object in the game that is mutable.
+	 * 
+	 * @param width
+	 * @param height
+	 * @param sheet
+	 */
 	public Entity(int width, int height, SpriteSheet sheet)
 	{
 		this.width = width;
@@ -20,10 +27,17 @@ public abstract class Entity extends JComponent{
 	{
 		this.sheet = sheet;
 	}
+	
+	public abstract BufferedImage changeImages();
 
 	public Entity() {
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+	}	
+	
 	public int getWidth() {
 		return width;
 	}
