@@ -150,7 +150,7 @@ public class Julius extends Boss{
 	}
 	
 	public BufferedImage walk(int yCoord){
-		return sheet.getImage(0, yCoord)
+		return sheet.getImage(0, yCoord);
 	}
 
 	private void setVelx(int vel) {

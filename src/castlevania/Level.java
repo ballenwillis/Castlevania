@@ -28,10 +28,10 @@ public class Level extends JComponent{
 	{
 		this.levelName = level;
 		try {
-			this.setImage(ImageIO.read(new File(level)));
+                    this.setImage(ImageIO.read(new File(level)));
 		} catch (IOException e) {
 
-			System.out.println("Error Opening Level File.");
+                    System.out.println("Error Opening Level File.");
 		}
 
 		this.obstacles = new ArrayList<Entity>();
@@ -42,10 +42,12 @@ public class Level extends JComponent{
 	}
 	@Override
 	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		BufferedImage drawnImage = image.getSubimage(this.x, this.y, Game.WIDTH, Game.HEIGHT);
-		g.drawImage(drawnImage, 0, 0,null);
-		repaint();
+            super.paintComponent(g);
+            if(image!=null){
+                BufferedImage drawnImage = image.getSubimage(this.x, this.y, Game.WIDTH, Game.HEIGHT);
+                g.drawImage(drawnImage, 0, 0,null);
+                repaint();
+            }
 	}
 	
 	public void paintAllEntities()
