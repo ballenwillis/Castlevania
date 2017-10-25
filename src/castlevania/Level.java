@@ -43,9 +43,9 @@ public class Level extends JComponent{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		BufferedImage drawnImage = image.getSubimage(this.x, this.y, Game.WIDTH, Game.HEIGHT);
-		g.drawImage(drawnImage, 0, 0,null);
-		repaint();
+                if(image!=null){
+                      
+                }
 	}
 	
 	public void paintAllEntities()
