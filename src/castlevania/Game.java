@@ -55,7 +55,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private boolean isStart = true;
 
 	private static Level[] levels = {
-			new Level("levels/level1.1bg.png", new Audio(
+			new Level("levels/level1bg.png", new Audio(
 					"music/vampirekiller.wav")),
 			new Level("levels/level2bg.png",
 					new Audio("music/monsterdance.wav")),
